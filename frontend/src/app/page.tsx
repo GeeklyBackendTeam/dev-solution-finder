@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ButtonDefault } from "./components/shared/MaterialButton";
+import Chart from "./components/stats/Chart";
 
 export default function Home() {
   return (
@@ -8,8 +9,13 @@ export default function Home() {
       <p className="m-0 max-w-[30ch] text-sm opacity-50">
             Hello World
             <ButtonDefault/>
+           
           </p>
+          
       </div>
+      {/* <div>
+       <Chart/>
+      </div> */}
     </main>
   );
 }
