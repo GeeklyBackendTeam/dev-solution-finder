@@ -12,11 +12,26 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain.utils.openai_functions import (
+    convert_pydantic_to_openai_function,
+)
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.pydantic_v1 import BaseModel, Field, validator
+from langchain.output_parsers.openai_functions import JsonOutputFunctionsParser
 
 app = FastAPI()
 
 # Load environment variables from .env file
 load_dotenv()
+
+class Joke(BaseModel):
+    """Give me detail about Performance and learning curve of given technologies"""
+
+    Performance: str = Field(description="tell me about Performance ")
+    LearningCurve: str = Field(description="tell me about learning curve")
+
+
+openai_functions = [convert_pydantic_to_openai_function(Joke)]
 
 @app.get("/")
 async def redirect_root_to_docs():
@@ -32,51 +47,21 @@ async def hello_world():
 async def call_openai_model(user_input: str):
     try:
         api_key = os.getenv("OPENAI_API_KEY")
-        model = ChatOpenAI(api_key=api_key, temperature=0.9)
+        model = ChatOpenAI(api_key=api_key)
 
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", "Answer the user's question in 3 words"),
-                ("user", user_input),
-            ]
-        )
-        
-        chain = prompt | model | StrOutputParser()
-        response = chain.invoke({"query": user_input})
+        prompt = ChatPromptTemplate.from_template("Do a detailed analysis of technolgy {topic}")
+
+        chain = prompt | model.bind(functions=openai_functions)  |JsonOutputFunctionsParser()
+        response = chain.invoke({"topic": "user_input"})
         
         # Return the raw response
-        return JSONResponse(content={"response": response})
+        return response
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
 
 
-# # Define your desired data structure.
-# class Joke(BaseModel):
-#     setup: str = Field(description="question to set up a joke")
-#     punchline: str = Field(description="answer to resolve the joke")
-
-# # Route to call OpenAI model to tell joke
-# @app.get("/openai/{joke}")
-# model = ChatOpenAI(temperature=0)
-# # And a query intented to prompt a language model to populate the data structure.
-# joke_query = "Tell me a joke."
-
-# # Set up a parser + inject instructions into the prompt template.
-# parser = JsonOutputParser(pydantic_object=Joke)
-
-# prompt = PromptTemplate(
-#     template="Answer the user query.\n{format_instructions}\n{query}\n",
-#     input_variables=["query"],
-#     partial_variables={"format_instructions": parser.get_format_instructions()},
-# )
-
-# chain = prompt | model | parser
-
-# chain.invoke({"query": joke_query})
-
-# Edit this to add the chain you want to add
 add_routes(app, research_assistant_chain, path="/research-assistant")
 
 if __name__ == "__main__":
