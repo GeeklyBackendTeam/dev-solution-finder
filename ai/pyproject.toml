@@ -14,7 +14,6 @@ uvicorn = "^0.23.2"
 langserve = {extras = ["server"], version = ">=0.0.30"}
 pydantic = "<2"
 research-assistant = {path = "packages/research-assistant", develop = true}
-extraction-openai-functions = {path = "packages/extraction-openai-functions", develop = true}
 
 
 [tool.poetry.group.dev.dependencies]
