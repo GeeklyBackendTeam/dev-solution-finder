@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -30,4 +31,8 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.font-source-code-pro {
+  font-family: 'Source Code Pro', monospace;
 }
