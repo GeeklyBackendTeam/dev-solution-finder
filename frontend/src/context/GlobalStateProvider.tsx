@@ -55,7 +55,7 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchParameters = async () => {
     try {
-      // Replace with your API endpoint
+      // Replace with real endpoint. It's hardcoded for now.
     //   const response = await fetch("https://api.example.com/data");
     //   const data = await response.json();
 
