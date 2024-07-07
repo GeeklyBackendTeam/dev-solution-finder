@@ -48,8 +48,8 @@ var mockparams = {
 }
 
 export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
-  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState("Default Content");
   const [parameters, setParameters] = useState<{[group: string]: {[paramId: number]: string}}>(mockparams);
 
@@ -74,7 +74,7 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <div style={divStyle}>
+    <>
         <GlobalStateContext.Provider
         value={{
         isLeftPanelOpen,
@@ -89,7 +89,7 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </GlobalStateContext.Provider>
-    </div>
+    </>
   );
 };
 

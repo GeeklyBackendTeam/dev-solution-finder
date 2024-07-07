@@ -6,7 +6,7 @@ interface LayoutProps {
 }
 
 export const Layout: FC<LayoutProps> = ({ children }) => {
-  return <div className="min-h-screen flex">
+  return <div className="min-h-screen flex w-full">
             <GlobalStateProvider>
                 {children}
             </GlobalStateProvider>

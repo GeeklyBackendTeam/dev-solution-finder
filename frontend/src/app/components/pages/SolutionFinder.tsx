@@ -1,17 +1,5 @@
 "use client";
 
-// import { useState, useEffect } from "react";
-// import { FunnelIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
-// import styles from "./SolutionFinder.module.css";
-// import { Layout } from "../templates/Layout";
-// import { ProjectList } from "../organisms/ProjectList";
-// import { Accordion } from "../organisms/Accordion";
-// import { useGlobalState } from "@/context/GlobalStateProvider";
-// import { useParameterFilter } from "@/app/hooks/useParameterFilter";
-// import ComparisonTable from "../organisms/ComparisonTable";
-
-// var activeParams = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-
 var solutionsData = {
     "sol1": {
         1: true,
@@ -150,90 +138,8 @@ var solutionsData = {
         15: "param 4",
     }                
 }
-// const Home = () => {
-//   const {
-//     isLeftPanelOpen,
-//     setIsLeftPanelOpen,
-//     isRightPanelOpen,
-//     setIsRightPanelOpen,
-//     currentProject,
-//     parameters
-//   } = useGlobalState();
 
-//   const { selectedParameters, addParameter, removeParameter } = useParameterFilter();
-
-//   useEffect(() => {
-//     console.log("Selected Parameters: ", selectedParameters);
-//   }, [selectedParameters]);
-
-//   const data = [
-//     {
-//       category: "License",
-//       subcategories: [{Name: "Parameter 1", Id: 1}, {Name: "Parameter 2", Id: 2}],
-//     },
-//     {
-//       category: "Security",
-//       subcategories: [{Name: "Parameter 1", Id: 3}, {Name: "Parameter 2", Id: 4}],
-//     },
-//     {
-//       category: "Performance",
-//       subcategories: [{Name: "Parameter 1", Id: 5}, {Name: "Parameter 2", Id: 6}],
-//     },
-//   ];
-
-//   return (
-//     <Layout>
-//       <div className="relative flex h-screen w-full overflow-hidden">
-//         <div
-//           className={`flex flex-col bg-gray-900 text-gray-300 overflow-y-auto ${isLeftPanelOpen ? "w-1/5" : "w-0"}`}
-//         >
-//           <button
-//             onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
-//             className="absolute top-4 left-4 bg-gray-900 p-2 rounded"
-//           >
-//             <BriefcaseIcon className="h-6 w-6 text-purple-500" />
-//           </button>
-//           <div className={`w-full p-4 mt-16 ${isLeftPanelOpen ? 'block' : 'hidden'}`}>
-//             <ProjectList />
-//           </div>
-//         </div>
-//         <div
-//           className={`flex-1 bg-gray-800 overflow-hidden ${
-//             true ? 'transition-width duration-300' : ''
-//           }`}
-//         >
-//           <div className="flex h-full items-center justify-center">
-//           <ComparisonTable solutionsData={solutionsData} activeParameters={activeParams} />
-//           </div>
-//         </div>
-//         <div
-//           className={`flex flex-col bg-gray-900 text-gray-300 overflow-y-auto ${
-//             true ? 'transition-width duration-300' : ''
-//           } ${isRightPanelOpen ? "w-1/5" : "w-0"}`}
-//         >
-//           <button
-//             onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
-//             className="absolute top-4 right-4 bg-gray-900 p-2 rounded"
-//           >
-//             <FunnelIcon className="h-6 w-6 text-purple-500" />
-//           </button>
-//           <div className={`w-full p-4 mt-16 ${isRightPanelOpen ? 'block' : 'hidden'}`}>
-//             <Accordion 
-//             panel="right" 
-//             data={parameters}
-//             onSubcategoryClick={(subcategoryId: number) => {
-//                 addParameter(subcategoryId);
-//               }} />
-//           </div>
-//         </div>
-//       </div>
-//     </Layout>
-//   );
-// };
-
-// export default Home;
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FunnelIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 import styles from "./SolutionFinder.module.css";
 import { Layout } from "../templates/Layout";
@@ -242,74 +148,93 @@ import { Accordion } from "../organisms/Accordion";
 import { useGlobalState } from "@/context/GlobalStateProvider";
 import { useParameterFilter } from "@/app/hooks/useParameterFilter";
 import ComparisonTable from "../organisms/ComparisonTable";
+import TechStackSelection from "../organisms/TechStackSelection";
+import { Stack, StackSubbcategories } from "@/app/types/constants";
 
 const Home = () => {
-  const {
-    isLeftPanelOpen,
-    setIsLeftPanelOpen,
-    isRightPanelOpen,
-    setIsRightPanelOpen,
-    parameters,
-  } = useGlobalState();
+    const {
+      isLeftPanelOpen,
+      setIsLeftPanelOpen,
+      isRightPanelOpen,
+      setIsRightPanelOpen,
+      parameters,
+    } = useGlobalState();
+  
+    const { selectedParameters, addParameter, removeParameter } = useParameterFilter();
+    const [stage, setStage] = useState<"stack" | "stackCategory" | "projectDescription" | "comparison">("stack");
+    const [stack, setStack] = useState<string>("");
+    const [stackCategory, setStackCategory] = useState<string>("");
+  
+    const handleSubcategoryClick = (subcategoryId: number) => {
+      if (selectedParameters.includes(subcategoryId)) {
+        removeParameter(subcategoryId);
+      } else {
+        addParameter(subcategoryId);
+      }
+    };
 
-  const { selectedParameters, addParameter, removeParameter } = useParameterFilter();
-
-  const handleSubcategoryClick = (subcategoryId: number) => {
-    if (selectedParameters.includes(subcategoryId)) {
-      removeParameter(subcategoryId);
-    } else {
-      addParameter(subcategoryId);
+    const handleStackSelection = (stack: string) => {
+        setStage("stackCategory");
+        setStack(stack);
     }
+
+    const handleStackCategorySelection = (stack: string) => {
+        setStage("comparison");
+        setStackCategory(stack);
+    }
+  
+    return (
+      <Layout>
+        <div className="relative flex h-screen w-full overflow-hidden">
+          <div className={`flex flex-col bg-gray-900 text-gray-300 overflow-y-auto ${isLeftPanelOpen ? "w-1/5" : "w-0"}`}>
+            {stage == "comparison" && (
+                <button
+                onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
+                className="absolute top-4 left-4 bg-gray-900 p-2 rounded"
+              >
+                <BriefcaseIcon className="h-6 w-6 text-purple-500" />
+              </button>
+            )}
+            <div className={`w-full p-4 mt-16 ${isLeftPanelOpen ? 'block' : 'hidden'}`}>
+              <ProjectList />
+            </div>
+          </div>
+          <div className={`flex-1 bg-gray-800 overflow-hidden ${isLeftPanelOpen ? 'transition-width duration-300' : ''}`}>
+          {stage == "stack" && (
+            <div className="flex flex-col items-center justify-center h-full">
+                <TechStackSelection onSelect={handleStackSelection} items={Stack} label="Hello! What stack would you like to research today?"/>
+            </div>           
+          )}
+           {stage == "stackCategory" && (
+            <div className="flex flex-col items-center justify-center h-full">
+                <TechStackSelection onSelect={handleStackCategorySelection} items={StackSubbcategories[stack as keyof typeof StackSubbcategories]} label={"Let's narrow down what aspect of " + stack.toLocaleLowerCase() + " are you interested in?"}/>
+            </div>           
+          )}
+            <div className={`flex h-full items-center justify-center ${styles.tableContainer} ${stage === "comparison" ? styles.showTable : styles.hiddenTable}`}>
+              <ComparisonTable solutionsData={solutionsData} activeParameters={selectedParameters} />
+            </div>
+          </div>
+          <div className={`flex flex-col bg-gray-900 text-gray-300 overflow-y-auto ${isRightPanelOpen ? "w-1/5" : "w-0"} ${isRightPanelOpen ? 'transition-width duration-300' : ''}`}>
+            {stage == "comparison" && (
+                <button
+                onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
+                className="absolute top-4 right-4 bg-gray-900 p-2 rounded"
+              >
+                <FunnelIcon className="h-6 w-6 text-purple-500" />
+              </button>
+            )}
+            <div className={`w-full p-4 mt-16 ${isRightPanelOpen ? 'block' : 'hidden'}`}>
+              <Accordion 
+                panel="right" 
+                data={parameters}
+                selectedParameters={selectedParameters}
+                onSubcategoryClick={handleSubcategoryClick} />
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
   };
-
-  return (
-    <Layout>
-      <div className="relative flex h-screen w-full overflow-hidden">
-        <div
-          className={`flex flex-col bg-gray-900 text-gray-300 overflow-y-auto ${isLeftPanelOpen ? "w-1/5" : "w-0"}`}
-        >
-          <button
-            onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
-            className="absolute top-4 left-4 bg-gray-900 p-2 rounded"
-          >
-            <BriefcaseIcon className="h-6 w-6 text-purple-500" />
-          </button>
-          <div className={`w-full p-4 mt-16 ${isLeftPanelOpen ? 'block' : 'hidden'}`}>
-            <ProjectList />
-          </div>
-        </div>
-        <div
-          className={`flex-1 bg-gray-800 overflow-hidden ${
-            true ? 'transition-width duration-300' : ''
-          }`}
-        >
-          <div className="flex h-full items-center justify-center">
-            <ComparisonTable solutionsData={solutionsData} activeParameters={selectedParameters} />
-          </div>
-        </div>
-        <div
-          className={`flex flex-col bg-gray-900 text-gray-300 overflow-y-auto ${
-            true ? 'transition-width duration-300' : ''
-          } ${isRightPanelOpen ? "w-1/5" : "w-0"}`}
-        >
-          <button
-            onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
-            className="absolute top-4 right-4 bg-gray-900 p-2 rounded"
-          >
-            <FunnelIcon className="h-6 w-6 text-purple-500" />
-          </button>
-          <div className={`w-full p-4 mt-16 ${isRightPanelOpen ? 'block' : 'hidden'}`}>
-            <Accordion 
-              panel="right" 
-              data={parameters}
-              selectedParameters={selectedParameters}
-              onSubcategoryClick={handleSubcategoryClick} />
-          </div>
-        </div>
-      </div>
-    </Layout>
-  );
-};
-
-export default Home;
+  
+  export default Home;
 
