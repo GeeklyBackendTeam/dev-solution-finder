@@ -1,3 +1,4 @@
+import { GlobalStateProvider } from '@/context/GlobalStateProvider';
 import React, { FC, ReactNode } from 'react';
 
 interface LayoutProps {
@@ -5,5 +6,9 @@ interface LayoutProps {
 }
 
 export const Layout: FC<LayoutProps> = ({ children }) => {
-  return <div className="min-h-screen flex">{children}</div>;
+  return <div className="min-h-screen flex">
+            <GlobalStateProvider>
+                {children}
+            </GlobalStateProvider>
+        </div>;
 };

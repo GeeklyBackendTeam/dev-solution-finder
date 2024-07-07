@@ -28,6 +28,7 @@
   cursor: pointer;
 }
 
-.Maccordion__subcategory:hover {
-  
+.Maccordion__subcategory_selected {
+  background-color: rgba(0, 204, 204, 0.2); /* Robbins Egg Blue */
+  color: white; /* Optional: Change text color when selected */
 }
