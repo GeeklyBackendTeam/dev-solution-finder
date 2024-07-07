@@ -52,7 +52,7 @@ async def call_openai_model(user_input: str):
         prompt = ChatPromptTemplate.from_template("Do a detailed analysis of technolgy {topic}")
 
         chain = prompt | model.bind(functions=openai_functions)  |JsonOutputFunctionsParser()
-        response = chain.invoke({"topic": "user_input"})
+        response = chain.invoke({"topic": user_input})
         
         # Return the raw response
         return response
