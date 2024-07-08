@@ -36,7 +36,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ./ai/
-        file: ./Dockerfile
+        file: ./ai/Dockerfile
         load: true
         tags: ${{ env.TEST_TAG }}
     - name: Test
@@ -46,6 +46,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ./ai/
-        file: ./Dockerfile
+        file: ./ai/Dockerfile
         push: true
         tags: ${{ env.VERSION_TAG }},${{ env.LATEST_TAG }}
