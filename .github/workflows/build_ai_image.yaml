@@ -16,8 +16,8 @@ on:
 
 env:
   TEST_TAG: user/app:test
-  VERSION_TAG: ghcr.io/geeklybackendteam/solution-finder-geekle:${{ github.sha }}
-  LATEST_TAG: ghcr.io/geeklybackendteam/solution-finder-geekle:latest
+  VERSION_TAG: ghcr.io/geeklybackendteam/ai:${{ github.sha }}
+  LATEST_TAG: ghcr.io/geeklybackendteam/ai:latest
 
 
 jobs:
@@ -54,4 +54,4 @@ jobs:
         context: ./ai/
         file: ./ai/Dockerfile
         push: true
-        tags: ${{ env.VERSION_TAG }},${{ env.LATEST_TAG }}
+        tags: ${{ env.LATEST_TAG }}
