@@ -1,0 +1,51 @@
+name: Build AI Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ai/**'
+      - '.github/workflows/**image.yaml'
+
+env:
+  TEST_TAG: user/app:test
+  VERSION_TAG: ghcr.io/${{ github.repository_owner }}/solution-finder-geekle:${{ github.sha }}
+  LATEST_TAG: ghcr.io/${{ github.repository_owner }}/solution-finder-geekle:latest
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.DOCKER_UPLOAD_TOKEN }}
+
+    - name: Build and export to Docker
+      uses: docker/build-push-action@v5
+      with:
+        context: ./ai/
+        file: ./ai/Dockerfile
+        load: true
+        tags: ${{ env.TEST_TAG }}
+    - name: Test
+      run: |
+        docker run --rm ${{ env.TEST_TAG }}
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: ./ai/
+        file: ./ai/Dockerfile
+        push: true
+        tags: ${{ env.VERSION_TAG }},${{ env.LATEST_TAG }}

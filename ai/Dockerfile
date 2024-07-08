@@ -1,21 +1,31 @@
+# Use the official Python image from the Docker Hub
 FROM python:3.11-slim
 
-RUN pip install poetry==1.6.1
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
-RUN poetry config virtualenvs.create false
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  libpq-dev \
+  && apt-get clean
 
+# Set the working directory in the container
 WORKDIR /code
 
-COPY ./pyproject.toml ./README.md ./poetry.lock* ./
+# Copy the requirements file
+COPY requirements.txt /code/
 
-COPY ./package[s] ./packages
+# Install Python dependencies
+RUN pip install --upgrade pip \
+  && pip install -r requirements.txt
 
-RUN poetry install  --no-interaction --no-ansi --no-root
+# Copy the application code into the container
+COPY . /code/
 
-COPY ./app ./app
+# Expose the port FastAPI is running on
+EXPOSE 8000
 
-RUN poetry install --no-interaction --no-ansi
-
-EXPOSE 8080
-
-CMD exec uvicorn app.server:app --host 0.0.0.0 --port 8080
+# Command to run the FastAPI app using uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

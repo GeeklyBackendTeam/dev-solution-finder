@@ -1,0 +1,23 @@
+name: Frontend Checks
+
+on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - 'frontend/**'
+
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install libs
+        working-directory: ./frontend
+        run: npm ci
+      - name: Lint
+        working-directory: ./frontend
+        run: npm run lint
+      - name: Build
+        working-directory: ./frontend
+        run: npm run build
