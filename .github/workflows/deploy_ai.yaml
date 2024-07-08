@@ -20,5 +20,5 @@ jobs:
         key: ${{ secrets.SERVER_PASS }}
         port: ${{ secrets.SERVER_PORT }}
         script: |
-          cd /app
-          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} docker compose up -f docker-compose.prod.yml --build
+          cd /app/ai
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} docker compose -f docker-compose.prod.yml up --build
