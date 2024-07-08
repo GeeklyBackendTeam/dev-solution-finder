@@ -6,6 +6,7 @@ on:
       - 'Build AI Image'
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   deploy:
