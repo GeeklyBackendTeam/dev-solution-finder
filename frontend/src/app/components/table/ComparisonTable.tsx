@@ -75,6 +75,9 @@ export const ComparisonTable: React.FC = () => {
                     variant="small"
                     color="white"
                     className="font-normal font-source-code-pro"
+                    placeholder=""
+                    onPointerEnterCapture={()=>{}}
+                    onPointerLeaveCapture={()=>{}}
                   >
                     {name}
                   </Typography>
@@ -84,6 +87,9 @@ export const ComparisonTable: React.FC = () => {
                     variant="small"
                     color="white"
                     className="font-normal font-source-code-pro"
+                    placeholder=""
+                    onPointerEnterCapture={()=>{}}
+                    onPointerLeaveCapture={()=>{}}
                   >
                     {type}
                   </Typography>
@@ -93,6 +99,9 @@ export const ComparisonTable: React.FC = () => {
                     variant="small"
                     color="white"
                     className="font-normal font-source-code-pro"
+                    placeholder=""
+                    onPointerEnterCapture={()=>{}}
+                    onPointerLeaveCapture={()=>{}}
                   >
                     {release_year}
                   </Typography>
@@ -102,6 +111,9 @@ export const ComparisonTable: React.FC = () => {
                     variant="small"
                     color="white"
                     className="font-normal font-source-code-pro"
+                    placeholder=""
+                    onPointerEnterCapture={()=>{}}
+                    onPointerLeaveCapture={()=>{}}
                   >
                     {developer}
                   </Typography>
