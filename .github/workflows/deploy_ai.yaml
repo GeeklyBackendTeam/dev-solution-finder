@@ -21,4 +21,4 @@ jobs:
         port: ${{ secrets.SERVER_PORT }}
         script: |
           cd /app
-          docker compose --build
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} docker compose up -f docker-compose.prod.yml --build
