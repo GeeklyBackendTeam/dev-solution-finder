@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'ai/**'
+      - '.github/workflows/**image.yaml'
 
 env:
   TEST_TAG: user/app:test
@@ -34,8 +35,8 @@ jobs:
     - name: Build and export to Docker
       uses: docker/build-push-action@v5
       with:
-        context: .
-        file: ./ai/Dockerfile
+        context: ./ai/
+        file: ./Dockerfile
         load: true
         tags: ${{ env.TEST_TAG }}
     - name: Test
@@ -44,7 +45,7 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: .
-        file: ./ai/Dockerfile
+        context: ./ai/
+        file: ./Dockerfile
         push: true
         tags: ${{ env.VERSION_TAG }},${{ env.LATEST_TAG }}
