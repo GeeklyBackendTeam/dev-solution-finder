@@ -35,7 +35,7 @@ jobs:
         password: ${{ secrets.DOCKER_UPLOAD_TOKEN }}
 
     - name: Build and export to Docker
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: ./ai/
         file: ./ai/Dockerfile
@@ -45,7 +45,7 @@ jobs:
       run: |
         docker run --rm ${{ env.TEST_TAG }}
     - name: Build and push
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: ./ai/
         file: ./ai/Dockerfile
