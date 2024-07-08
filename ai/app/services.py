@@ -8,8 +8,7 @@ from langchain_core.runnables import Runnable
 from fastapi import HTTPException
 from app.config import Config
 from app.models import TechnologyComparison
-from langchain_core.utils.function_calling import convert_to_openai_function
-from app.main import app
+from langchain.utils.openai_functions import convert_pydantic_to_openai_function
 
 logger = logging.getLogger("app.server")
 
@@ -26,7 +25,7 @@ frontend_template = PromptTemplate(
     """
 ) + "\n Limit each parameter's response to 4-5 words."
 
-openai_functions = [convert_to_openai_function(TechnologyComparison)]
+openai_functions = [convert_pydantic_to_openai_function(TechnologyComparison)]
 
 class CompareTechnologiesRunnable(Runnable):
     async def invoke(self, input_data):
