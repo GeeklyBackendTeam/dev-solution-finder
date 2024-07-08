@@ -1,0 +1,24 @@
+name: Update Compose
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**compose.yml'
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_PASS }}
+        port: ${{ secrets.SERVER_PORT }}
+        source: "ai/docker-compose.prod.yml"
+        target: "/app"

@@ -76,4 +76,15 @@ We also expose port 8080 with the `-p 8080:8080` option.
 
 ```shell
 docker run -e OPENAI_API_KEY=$OPENAI_API_KEY -p 8080:8080 my-langserve-app
+
+```
+
+Or with docker compose for development:
+```shell
+OPENAI_API_KEY=$OPENAI_API_KEY docker compose up --build
+```
+
+Or with docker compose for production:
+```shell
+OPENAI_API_KEY=$OPENAI_API_KEY docker compose -f docker-compose.prod.yml up --build
 ```

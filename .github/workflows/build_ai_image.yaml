@@ -7,11 +7,13 @@ on:
     paths:
       - 'ai/**'
       - '.github/workflows/**image.yaml'
+  workflow_dispatch:
+
 
 env:
   TEST_TAG: user/app:test
-  VERSION_TAG: ghcr.io/${{ github.repository_owner }}/solution-finder-geekle:${{ github.sha }}
-  LATEST_TAG: ghcr.io/${{ github.repository_owner }}/solution-finder-geekle:latest
+  VERSION_TAG: ghcr.io/geeklybackendteam/solution-finder-geekle:${{ github.sha }}
+  LATEST_TAG: ghcr.io/geeklybackendteam/solution-finder-geekle:latest
 
 
 jobs:

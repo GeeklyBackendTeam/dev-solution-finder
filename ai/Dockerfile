@@ -11,21 +11,14 @@ RUN apt-get update && apt-get install -y \
   libpq-dev \
   && apt-get clean
 
+# Copy the application code into the container
+COPY . /code/
+
 # Set the working directory in the container
 WORKDIR /code
-
-# Copy the requirements file
-COPY requirements.txt /code/
 
 # Install Python dependencies
 RUN pip install --upgrade pip \
   && pip install -r requirements.txt
 
-# Copy the application code into the container
-COPY . /code/
-
-# Expose the port FastAPI is running on
-EXPOSE 8000
-
-# Command to run the FastAPI app using uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "sleep 5s"]
