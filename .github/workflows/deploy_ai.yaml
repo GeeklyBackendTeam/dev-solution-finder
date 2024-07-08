@@ -14,6 +14,13 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.DOCKER_UPLOAD_TOKEN }}
+
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v1.0.3
       with:
