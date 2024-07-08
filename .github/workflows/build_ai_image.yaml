@@ -1,8 +1,6 @@
 name: Build AI Image
 
-permissions:
-  contents: read
-  packages: write
+permissions: write-all
 
 on:
   push:
