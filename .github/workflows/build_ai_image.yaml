@@ -1,5 +1,9 @@
 name: Build AI Image
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   push:
     branches:
