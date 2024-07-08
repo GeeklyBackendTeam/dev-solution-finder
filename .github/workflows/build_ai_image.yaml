@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'ai'
+      - 'ai/**'
 
 env:
   TEST_TAG: user/app:test
