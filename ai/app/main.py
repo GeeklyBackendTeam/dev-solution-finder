@@ -96,7 +96,7 @@ def create_comparison_response(tech_info):
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
-@app.post("/hello")
+@app.post("/chat")
 async def hello_world(request: Request):
     input_data = await request.json()
     compare_request = CompareRequest(**input_data)
@@ -151,7 +151,7 @@ async def hello_world(request: Request):
     ]
 
     # Create a comparison response based on technology information
-    formatted_result = create_comparison_response(tech_info)
+    formatted_result = create_comparison_response(tech_names)
     
     return JSONResponse(content=formatted_result)
 
