@@ -89,6 +89,8 @@ def fetch_technology_data_from_openai(tech_name, parameters, api_key):
     Please provide the information for {tech_name}.
     """
     
+    logging.info(f"Sending prompt to OpenAI: {prompt}")
+
     try:
         response = model.invoke(prompt)
         response_content = response.content
@@ -149,10 +151,10 @@ async def compare_technologies(request: Request):
 
     response_data = []
 
-    for index, (tech, tech_data) in enumerate(comparisons.items(), start=1):
+    for tech, tech_data in comparisons.items():
         attributes = {key: tech_data.get(key, None) for key in relevant_parameters}
         tech_comparison = TechnologyComparison(name=tech, attributes=attributes)
-        response_data.append({f"tech{index}": tech_comparison})
+        response_data.append({tech: tech_comparison})
 
     logging.info(f"Response data: {response_data}")
     return ComparisonResponse(comparisons=response_data)

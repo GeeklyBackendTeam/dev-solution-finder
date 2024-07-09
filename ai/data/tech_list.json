@@ -1,23 +1,23 @@
 {
   "Cloud_Computing": {
-    "Providers": ["AWS", "Azure", "Google Cloud", "IBM Cloud", "GCP", "Amazon Web Services"],
+    "Providers": ["AWS", "Azure", "Google Cloud", "IBM Cloud"],
     "Tools": ["Kubernetes", "Docker", "Terraform", "Ansible"]
   },
   "Frontend_Development": {
-    "JavaScript": ["React", "React.js", "Angular", "Vue", "Vue.js"],
+    "JavaScript": ["React", "Angular", "Vue"],
     "CSS_Frameworks": ["Bootstrap", "Tailwind CSS", "Tailwind", "Foundation"],
     "Tooling": ["Webpack", "Babel", "ESLint"]
   },
   "Backend_Development": {
-    "Languages": ["Node.js", "Node", "Python", "Java", "Ruby"],
-    "Frameworks": ["Express", "Express.js", "Django", "Spring Boot", "Spring", "Rails", "Ruby on Rails"]
+    "Languages": ["Node.js","Python", "Java", "Ruby"],
+    "Frameworks": [ "Express.js", "Django", "Spring Boot", "Spring", "Rails", "Ruby on Rails"]
   },
   "Database_Technologies": {
     "SQL": ["PostgreSQL", "Postgres", "MySQL", "SQL Server", "Microsoft SQL Server"],
-    "NoSQL": ["MongoDB", "Mongo", "Cassandra", "Redis"]
+    "NoSQL": ["MongoDB", "Cassandra", "Redis"]
   },
   "AI_and_Machine_Learning": {
-    "Libraries": ["TensorFlow", "TF", "PyTorch", "Torch", "Scikit-learn", "sklearn"],
+    "Libraries": ["TensorFlow", "PyTorch", "Torch", "Scikit-learn", "sklearn"],
     "Platforms": ["Google AI Platform", "Azure Machine Learning", "AWS SageMaker", "Amazon SageMaker"]
   },
   "DevOps_Tools": {
