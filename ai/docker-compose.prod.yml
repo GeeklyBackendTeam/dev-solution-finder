@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   app:
-    image: ghcr.io/geeklybackendteam/solution-finder-geekle:latest
+    image: ghcr.io/geeklybackendteam/ai:latest
     ports:
       - "8000:8000"
     environment:
