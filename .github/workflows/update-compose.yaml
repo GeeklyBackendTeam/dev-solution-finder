@@ -1,11 +1,13 @@
 name: Update Compose
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - '**compose.yml'
+      - '**.prod.yml'
+
 jobs:
 
   build:
