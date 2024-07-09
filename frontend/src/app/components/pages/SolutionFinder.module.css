@@ -1,17 +1,17 @@
 .bg-gray-900 {
-  background-color: #1a1a2e; /* Dark background */
+  background-color: #fff; /* Dark background */
 }
 
 .bg-gray-800 {
-  background-color: #22223b; /* Slightly lighter dark background */
+  background-color: #fff; /* Slightly lighter dark background */
 }
 
 .bg-gray-700 {
-  background-color: #2d2d44; /* Darker button background */
+  background-color: #f1f1f9; /* Darker button background */
 }
 
 .text-gray-300 {
-  color: #d1d5db; /* Light text color */
+  color: #1f1f20; /* Light text color */
 }
 
 .text-purple-500 {

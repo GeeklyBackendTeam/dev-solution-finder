@@ -14,7 +14,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full p-4 bg-gray-800 flex flex-col items-center justify-center h-screen">
+    <form onSubmit={handleSubmit} className="w-full max-w-6xl overflow-auto min-h-[200px]">
       <label htmlFor="chat" className="block text-white mb-2">
         Tell me more about your project:
       </label>
