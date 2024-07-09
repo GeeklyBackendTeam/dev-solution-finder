@@ -55,7 +55,7 @@ const ComparisonTable = () => {
     const submitSelection = async () => {
         setLoading(true);
         try {
-            const response = await axios.post('http://91.134.105.119:8000/compare-assistant', {
+            const response = await axios.post('/compare-assistant', {
                 technologies: selectedTechs,
                 relevant_parameters: [],
                 output_format: "Detailed Comparison"
