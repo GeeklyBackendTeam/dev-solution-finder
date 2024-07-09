@@ -16,14 +16,6 @@ from langchain.schema import Document
 from requests.exceptions import HTTPError
 
 app = FastAPI()
-
-app.include_router(router)
-
-api_key = Config.OPENAI_API_KEY
-TAVILY_API_KEY = Config.TAVILY_API_KEY
-
-model = ChatOpenAI(api_key=api_key)
-
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -32,6 +24,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(router)
+
+api_key = Config.OPENAI_API_KEY
+TAVILY_API_KEY = Config.TAVILY_API_KEY
+
+model = ChatOpenAI(api_key=api_key)
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
