@@ -4,6 +4,7 @@ import time
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse, JSONResponse
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 from app.routes import router
 from app.services import CompareTechnologiesRunnable
 from langserve import add_routes
@@ -19,6 +20,15 @@ api_key = Config.OPENAI_API_KEY
 TAVILY_API_KEY = Config.TAVILY_API_KEY
 
 model = ChatOpenAI(api_key=api_key)
+
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

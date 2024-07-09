@@ -1,5 +1,7 @@
 name: Build AI Image
 
+permissions: write-all
+
 on:
   push:
     branches:
@@ -12,8 +14,8 @@ on:
 
 env:
   TEST_TAG: user/app:test
-  VERSION_TAG: ghcr.io/geeklybackendteam/solution-finder-geekle:${{ github.sha }}
-  LATEST_TAG: ghcr.io/geeklybackendteam/solution-finder-geekle:latest
+  VERSION_TAG: ghcr.io/geeklybackendteam/ai:${{ github.sha }}
+  LATEST_TAG: ghcr.io/geeklybackendteam/ai:latest
 
 
 jobs:
@@ -35,7 +37,7 @@ jobs:
         password: ${{ secrets.DOCKER_UPLOAD_TOKEN }}
 
     - name: Build and export to Docker
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: ./ai/
         file: ./ai/Dockerfile
@@ -45,9 +47,9 @@ jobs:
       run: |
         docker run --rm ${{ env.TEST_TAG }}
     - name: Build and push
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: ./ai/
         file: ./ai/Dockerfile
         push: true
-        tags: ${{ env.VERSION_TAG }},${{ env.LATEST_TAG }}
+        tags: ${{ env.LATEST_TAG }}

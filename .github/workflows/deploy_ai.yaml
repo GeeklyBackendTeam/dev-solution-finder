@@ -22,4 +22,5 @@ jobs:
         port: ${{ secrets.SERVER_PORT }}
         script: |
           cd /app/ai
-          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} docker compose -f docker-compose.prod.yml up --build
+          docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.DOCKER_UPLOAD_TOKEN }}
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} docker compose -f docker-compose.prod.yml up -d --remove-orphans --force-recreate --build
