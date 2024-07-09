@@ -16,6 +16,9 @@ from langchain.schema import Document
 from requests.exceptions import HTTPError
 
 app = FastAPI()
+
+app.include_router(router)
+
 api_key = Config.OPENAI_API_KEY
 TAVILY_API_KEY = Config.TAVILY_API_KEY
 
@@ -165,7 +168,6 @@ async def hello_world(request: Request):
     
     return JSONResponse(content=formatted_result)
 
-app.include_router(router)
 
 compare_technologies_runnable = CompareTechnologiesRunnable()
 add_routes(app, compare_technologies_runnable, path="/compare-assistant")
