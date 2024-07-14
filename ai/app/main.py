@@ -14,6 +14,14 @@ from langchain_community.retrievers import TavilySearchAPIRetriever
 from langgraph.graph import Graph
 from langchain.schema import Document
 from requests.exceptions import HTTPError
+from .prompt_template import graph_prompt  # Use relative import
+from langchain.prompts import PromptTemplate
+import json
+from datetime import datetime    
+import uvicorn
+import os
+# from app.convex_functions import save_context, get_context, delete_context
+from app.file_utils import save_context, get_context, delete_context,summarize_contexts
 
 app = FastAPI()
 
@@ -21,7 +29,8 @@ app.include_router(router)
 
 api_key = Config.OPENAI_API_KEY
 TAVILY_API_KEY = Config.TAVILY_API_KEY
-
+# CONVEX_URL = Config("CONVEX_URL", "https://<your-convex-project>.convex.dev")
+# client = ConvexClient(CONVEX_URL)
 model = ChatOpenAI(api_key=api_key)
 
 origins = ["*"]
@@ -108,6 +117,114 @@ def create_comparison_response(tech_info):
 @app.get("/")
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")
+
+
+# Define the initial prompt template for Mermaid diagram generation
+prompt_template = """
+Your task is to generate the Mermaid.js code based on the given inputs. Ensure the Mermaid.js code is correct and adheres to the standards.
+
+Your job is to write the code to generate a colorful mermaid diagram of {diagram_type}
+describing the below
+{details} information only, don't use any other information.
+Only generate the code as output, nothing extra, and do not use (brackets) or colors.
+Each line in the code must be terminated by ;
+Code:
+"""
+
+graph_prompt = PromptTemplate(template=prompt_template)
+
+# Define the prompt template for extracting additional context with non-technical terms
+clarification_prompt_template = """
+The user has provided the following details for a {diagram_type} diagram:
+{details}
+
+To generate a meaningful diagram, we need more information. Please list the additional details required for a {diagram_type} diagram and formulate clarifying questions to ask the user in simple, non-technical terms.
+
+Example:
+- For a Class diagram: "Can you tell me about the main parts or things in your app and how they connect?"
+- For a Sequence diagram: "Who is involved and what do they do step by step?"
+
+Questions:
+"""
+
+clarification_prompt = PromptTemplate(template=clarification_prompt_template)
+
+def extract_mermaid_code(content):
+    # Extract and clean the Mermaid.js code from the response content
+    return content.strip()
+
+async def ask_clarifying_questions(model, diagram_type, details):
+    # Generate clarifying questions using the model
+    formatted_prompt = clarification_prompt.format(
+        diagram_type=diagram_type,
+        details=details
+    )
+    try:
+        response = model.invoke(formatted_prompt)
+        # Log the response for debugging purposes
+        print("Clarifying questions response:", response.content)
+        return response.content.strip()
+    except Exception as e:
+        return str(e)
+
+@app.post("/graph")
+async def generate_graph(request: Request):
+    # Debugging: Log the raw request body
+    raw_body = await request.body()
+    print("Raw request body:", raw_body.decode())
+
+    try:
+        input_data = await request.json()
+    except json.JSONDecodeError as e:
+        print("JSON decoding error:", e)
+        return {"error": "Invalid JSON in request body"}
+
+    diagram_type = input_data.get("diagram_type")
+    details = input_data.get("details")
+    project_id = input_data.get("project_id")
+    conversation_id = input_data.get("conversation_id")
+    user_id = input_data.get("user_id")
+
+    # Validate the required fields
+    if not diagram_type or not details or not project_id or not conversation_id:
+        return {"error": "diagram_type, details, project_id, and conversation_id are required fields"}
+
+    # Summarize existing context for the user and project
+    summarized_context = summarize_contexts(project_id, user_id)
+    if summarized_context:
+        details = summarized_context + " " + details
+
+    # Save the current context
+    context = {
+        "diagram_type": diagram_type,
+        "details": details,
+        "timestamp": datetime.now().isoformat()
+    }
+    save_context(project_id, user_id, conversation_id, context)
+
+    # Check if the details provided are sufficient
+    if len(details.split()) < 10:  # Example condition for insufficient details
+        clarifying_questions = await ask_clarifying_questions(model, diagram_type, details)
+        return {"clarifying_questions": clarifying_questions}
+
+    # Format the prompt with provided data
+    formatted_prompt = graph_prompt.format(
+        diagram_type=diagram_type,
+        details=details
+    )
+
+    # Invoke the model
+    try:
+        response = model.invoke(formatted_prompt)
+        response_content = response.content.replace("", "").replace("mermaid", "")
+        response_content = extract_mermaid_code(response_content)
+
+        # Debugging: Log the response content
+        print("LLM response content:", response_content)
+
+        return {"mermaid_code": response_content}
+    except Exception as e:
+        return {"error": str(e)}
 
 @app.post("/chat")
 async def hello_world(request: Request):
