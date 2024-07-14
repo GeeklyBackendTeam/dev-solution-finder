@@ -24,15 +24,6 @@ import os
 from app.file_utils import save_context, get_context, delete_context,summarize_contexts
 
 app = FastAPI()
-
-app.include_router(router)
-
-api_key = Config.OPENAI_API_KEY
-TAVILY_API_KEY = Config.TAVILY_API_KEY
-# CONVEX_URL = Config("CONVEX_URL", "https://<your-convex-project>.convex.dev")
-# client = ConvexClient(CONVEX_URL)
-model = ChatOpenAI(api_key=api_key)
-
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -41,6 +32,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(router)
+
+api_key = Config.OPENAI_API_KEY
+TAVILY_API_KEY = Config.TAVILY_API_KEY
+
+model = ChatOpenAI(api_key=api_key)
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

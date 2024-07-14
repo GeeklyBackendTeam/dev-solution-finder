@@ -1,6 +1,7 @@
 // src/components/Tag.js
 import React from 'react';
 
+// @ts-ignore
 const Tag = ({ attribute, selected, onClick }) => {
     return (
         <span

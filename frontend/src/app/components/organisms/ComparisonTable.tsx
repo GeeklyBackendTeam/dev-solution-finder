@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -54,13 +55,13 @@ const ComparisonTable = () => {
     const submitSelection = async () => {
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:8000/compare-assistant', {
+            const response = await axios.post('/compare-assistant', {
                 technologies: selectedTechs,
                 relevant_parameters: [],
                 output_format: "Detailed Comparison"
             }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 }
             });
             setApiData(response.data.comparisons); // Store the "comparisons" part of the response

@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/compare-assistant",
+      "destination": "http://91.134.105.119:8000/compare-assistant"
+    }
+  ]
+}
